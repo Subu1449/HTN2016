@@ -6,7 +6,7 @@ var username = "10232d1226293e821dsafafdf138721223ez"
 var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
-var BridgeIP = '';
+var BridgeIP = ''; //This was used for getting the main bridge IP between the phillip hue and your app connection
 
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
