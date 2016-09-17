@@ -1,4 +1,4 @@
-# HTN2016
+# Hack The North 2016
 Phillips Hue + Leap Motion Integration hack
 
 ##Inspiration
