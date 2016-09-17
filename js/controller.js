@@ -145,7 +145,8 @@ function GroupSetState(GroupNr, State)
   });
 };
 
-
+//Helps turn on the specific group depending on the group number
+//the transition  time is quite crucial for this function
 function GroupOn(GroupNr, Transitiontime)
 {
   var State = new huepi.Lightstate();
@@ -154,6 +155,8 @@ function GroupOn(GroupNr, Transitiontime)
   return this.GroupSetState(GroupNr, State);
 };
 
+
+//same as above except that it turns off the group 
 function GroupOff(GroupNr, Transitiontime)
 {
   var State = new huepi.Lightstate();
@@ -163,6 +166,8 @@ function GroupOff(GroupNr, Transitiontime)
 };
 
 
+//HSB for hue, saturation and brightness. 
+//set the group sat, hue, and brightness and given the transition time
 function GroupSetHSB(GroupNr, Hue, Saturation, Brightness, Transitiontime)
 {
   var Ang = Hue * 360 / 65535;
