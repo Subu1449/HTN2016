@@ -110,7 +110,9 @@ function modifyLight(saturation, brightness, hue) {
     });
 }
 
-/**
+/*
+Get data every some time later. Basic call that gets schedule depending on what your Bridge connection
+is with your Phillip Hue
  */
 function SchedulesGetData()
 { // GET /api/username/schedules
@@ -123,7 +125,8 @@ function SchedulesGetData()
   });
 };
 
-/**
+/*
+gets the main scenes from phillip hue depending on the main connection with the bridge
  */
 function ScenesGetData()
 { // GET /api/username/scenes
@@ -137,7 +140,8 @@ function ScenesGetData()
 };
 
 
-/**
+/*
+gets the main sensor data from phillip hue depending on the main connection with the bridge
  */
 function SensorsGetData()
 { // GET /api/username/sensors
