@@ -54,6 +54,7 @@ Leap.loop(controllerOptions, function(frame) {
   previousFrame = frame;
 })
 
+//Helps display correctly for debugging purposes
 function vectorToString(vector, digits) {
   if (typeof digits === "undefined") {
     digits = 1;
@@ -63,12 +64,12 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
-
+//get the main group id depending on your group number
 function GroupGetId(GroupNr)
 {
   if (typeof GroupNr  === "number")
     if (GroupNr === 0)
-      return "0";
+      return 0;
     else if (GroupNr > 0)
       if (GroupNr <= this.GroupIds.length)
         return this.GroupIds[GroupNr-1];
@@ -76,7 +77,8 @@ function GroupGetId(GroupNr)
 };
 
 
-function GroupsGetData
+//this gets the main data from the group and makes an ajax request given the main bridge connection
+function GroupsGetData()
 { // GET /api/username/lights
   var self = this;
   var url = 'http://' + this.BridgeIP + '/api/' + this.Username + '/groups';
@@ -91,6 +93,8 @@ function GroupsGetData
 };
 
 
+//Create the main group depending on the name and lights. 
+//make the same ajax requests but instead with the lights
 function GroupCreate(Name, Lights)
 { // POST /api/username/groups
   return $.ajax({
