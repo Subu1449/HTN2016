@@ -63,9 +63,11 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
+
+//We need to have a pause option because pausing helps remove delays if a user is experienceing them
+//due to delays in the phillips hue API
 function togglePause() {
   paused = !paused;
-
   if (paused) {
     document.getElementById("pause").innerText = "Resume";
   } else {
