@@ -64,6 +64,152 @@ function vectorToString(vector, digits) {
 }
 
 
+function GroupGetId(GroupNr)
+{
+  if (typeof GroupNr  === "number")
+    if (GroupNr === 0)
+      return "0";
+    else if (GroupNr > 0)
+      if (GroupNr <= this.GroupIds.length)
+        return this.GroupIds[GroupNr-1];
+  return GroupNr;
+};
+
+
+function GroupsGetData
+{ // GET /api/username/lights
+  var self = this;
+  var url = 'http://' + this.BridgeIP + '/api/' + this.Username + '/groups';
+  return $.get(url, function(data) {
+    if (data) {
+      self.Groups = data;
+      self.GroupIds = [];
+      for (var key in self.Groups)
+        self.GroupIds.push(key);
+    }
+  });
+};
+
+
+function GroupCreate(Name, Lights)
+{ // POST /api/username/groups
+  return $.ajax({
+    type: 'POST',
+    dataType: 'json',
+    contentType: 'application/json',
+    url: 'http://' + this.BridgeIP + '/api/' + this.Username + '/groups/',
+    data: '{"name":"' + Name + '" , "lights":' + huepi.HelperToStringArray(Lights) + '}'
+  });
+};
+
+
+function GroupSetLights(GroupNr, Lights)
+{ // PUT /api/username/groups/[GroupNr]
+  return $.ajax({
+    type: 'PUT',
+    dataType: 'json',
+    contentType: 'application/json',
+    url: 'http://' + this.BridgeIP + '/api/' + this.Username + '/groups/' + this.GroupGetId(GroupNr),
+    data: '{"lights":' + huepi.HelperToStringArray(Lights) + '}'
+  });
+};
+
+
+function GroupSetAttributes(GroupNr, Name, Lights)
+{ // PUT /api/username/groups/[GroupNr]
+  return $.ajax({
+    type: 'PUT',
+    dataType: 'json',
+    contentType: 'application/json',
+    url: 'http://' + this.BridgeIP + '/api/' + this.Username + '/groups/' + this.GroupGetId(GroupNr),
+    data: '{"name":"' + Name + '", "lights":' + huepi.HelperToStringArray(Lights) + '}'
+  });
+};
+
+/**
+ * @param {number} GroupNr
+ * @param {LightState} State
+ */
+function GroupSetState(GroupNr, State)
+{ // PUT /api/username/groups/[GroupNr]/action
+  return $.ajax({
+    type: 'PUT',
+    dataType: 'json',
+    contentType: 'application/json',
+    url: 'http://' + this.BridgeIP + '/api/' + this.Username + '/groups/' + this.GroupGetId(GroupNr) + '/action',
+    data: State.Get()
+  });
+};
+
+
+function GroupOn(GroupNr, Transitiontime)
+{
+  var State = new huepi.Lightstate();
+  State.On();
+  State.SetTransitiontime(Transitiontime);
+  return this.GroupSetState(GroupNr, State);
+};
+
+function GroupOff(GroupNr, Transitiontime)
+{
+  var State = new huepi.Lightstate();
+  State.Off();
+  State.SetTransitiontime(Transitiontime);
+  return this.GroupSetState(GroupNr, State);
+};
+
+
+function GroupSetHSB(GroupNr, Hue, Saturation, Brightness, Transitiontime)
+{
+  var Ang = Hue * 360 / 65535;
+  var Sat = Saturation / 255;
+  var Bri = Brightness / 255;
+
+  var Color = huepi.HelperHueAngSatBritoRGB(Ang, Sat, Bri);
+  var Point = huepi.HelperRGBtoXY(Color.Red, Color.Green, Color.Blue);
+
+  return $.when(// return Deferred when of both Brightness and XY
+  this.GroupSetBrightness(GroupNr, Brightness, Transitiontime),
+  this.GroupSetXY(GroupNr, Point.x, Point.y, Transitiontime)
+  );
+};
+
+
+function GroupSetHue(GroupNr, Hue, Transitiontime)
+{
+  var State = new huepi.Lightstate();
+  State.SetHue(Hue);
+  State.SetTransitiontime(Transitiontime);
+  return this.GroupSetState(GroupNr, State);
+};
+
+
+function GroupSetSaturation(GroupNr, Saturation, Transitiontime)
+{
+  var State = new huepi.Lightstate();
+  State.SetSaturation(Saturation);
+  State.SetTransitiontime(Transitiontime);
+  return this.GroupSetState(GroupNr, State);
+};
+
+
+function GroupSetBrightness(GroupNr, Brightness, Transitiontime)
+{
+  var State = new huepi.Lightstate();
+  State.SetBrightness(Brightness);
+  State.SetTransitiontime(Transitiontime);
+  return this.GroupSetState(GroupNr, State);
+};
+
+
+function GroupSetHueAngSatBri(GroupNr, Ang, Sat, Bri, Transitiontime)
+{
+  while (Ang < 0)
+    Ang = Ang + 360;
+  Ang = Ang % 360;
+  return this.GroupSetHSB(GroupNr, Ang / 360 * 65535, Sat * 255, Bri * 255, Transitiontime);
+};
+
 //We need to have a pause option because pausing helps remove delays if a user is experienceing them
 //due to delays in the phillips hue API
 function togglePause() {
