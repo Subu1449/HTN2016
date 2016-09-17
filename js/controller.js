@@ -95,6 +95,11 @@ function authenticateUser(developer) {
     });
 }
  
+//This is the main function to change the color of the light depending on the motion 
+//attained from the leap motion. 
+//This function is called inside the Leap.motion loop which gets activated everytime a new
+//point is detected. 
+//For now, We look at the grab strength attribute
 function modifyLight(saturation, brightness, hue) {
     $.ajax({
         type: 'PUT',
