@@ -6,6 +6,7 @@ var username = "10232d1226293e821dsafafdf138721223ez"
 var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
+var BridgeIP = '';
 
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
@@ -101,36 +102,44 @@ function modifyLight(saturation, brightness, hue) {
         data: {"on":true, "sat":saturation, "bri":brightness,"hue":hue}
     });
 }
+
+/**
+ */
+function SchedulesGetData()
+{ // GET /api/username/schedules
+  var self = this;
+  var url = 'http://' + this.BridgeIP + '/api/' + this.Username + '/schedules';
+  return $.get(url, function(data) {
+    if (data) {
+      self.Schedules = data;
+    }
+  });
+};
+
+/**
+ */
+function ScenesGetData()
+{ // GET /api/username/scenes
+  var self = this;
+  var url = 'http://' + this.BridgeIP + '/api/' + this.Username + '/scenes';
+  return $.get(url, function(data) {
+    if (data) {
+      self.Scenes = data;
+    }
+  });
+};
+
+
+/**
+ */
+function SensorsGetData()
+{ // GET /api/username/sensors
+  var self = this;
+  var url = 'http://' + this.BridgeIP + '/api/' + this.Username + '/sensors';
+  return $.get(url, function(data) {
+    if (data) {
+      self.Sensors = data;
+    }
+  });
+};
  
-
-
-
-
-
-
-// function vectorToString(vector, digits) {
-//   if (typeof digits === "undefined") {
-//     digits = 1;
-//   }
-//   return "(" + vector[0].toFixed(digits) + ", "
-//              + vector[1].toFixed(digits) + ", "
-//              + vector[2].toFixed(digits) + ")";
-// }
-
-// function togglePause() {
-//   paused = !paused;
-
-//   if (paused) {
-//     document.getElementById("pause").innerText = "Resume";
-//   } else {
-//     document.getElementById("pause").innerText = "Pause";
-//   }
-// }
-
-// function pauseForGestures() {
-//   if (document.getElementById("pauseOnGesture").checked) {
-//     pauseOnGesture = true;
-//   } else {
-//     pauseOnGesture = false;
-//   }
-// }
